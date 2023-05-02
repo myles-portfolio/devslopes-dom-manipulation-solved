@@ -37,4 +37,48 @@
  * * add the event listener to the container, pass the callback.
  */
 
-// Your code goes here...
+const container = document.querySelector('.cardsContainer');
+const cards = document.querySelectorAll('.card');
+
+let storage = {
+  items: [],
+};
+
+const toggleFav = (item) => {
+  const id = item.getAttribute('id');
+  const isFav = item.dataset.fav === 'true';
+  item.classList.toggle('red', !isFav);
+  item.dataset.fav = isFav ? 'false' : 'true';
+
+  if (isFav) {
+    // Remove the item from storage
+    storage.items = storage.items.filter((itemId) => itemId !== id);
+  } else {
+    // Add the item to storage
+    storage.items.push(id);
+  }
+
+  localStorage.setItem('favorites', JSON.stringify(storage));
+};
+
+const callbackFn = (e) => {
+  const item = e.target;
+  if (item.classList.contains('card')) {
+    toggleFav(item);
+  }
+};
+
+container.addEventListener('click', callbackFn);
+
+// Load favorites from local storage
+const storageRawData = localStorage.getItem('favorites');
+if (storageRawData) {
+  storage = JSON.parse(storageRawData);
+  storage.items.forEach((itemId) => {
+    const item = document.getElementById(itemId);
+    if (item) {
+      item.dataset.fav = 'true';
+      item.classList.add('red');
+    }
+  });
+}

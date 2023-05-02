@@ -11,7 +11,7 @@
  * Example: const allItems = <Your code>;
  */
 
-// Your code goes here...
+const allItems = document.querySelectorAll('.item');
 
 
 
@@ -22,7 +22,7 @@
  * Example: const main = <Your code>
  * */
 
-// Your code goes here
+const main = document.querySelector('#main');
 
 
 
@@ -33,7 +33,7 @@
  * Example: const favs = <Your code>;
  */
 
-// Your code goes here
+const favs = document.querySelector('#favs');
 
 
 
@@ -46,7 +46,18 @@
  * Changes the icon of the element: fa-heart-circle-plus for main, fa-heart-crack for favs items.
  */
 
-// Your code goes here
+const updateCollections = (id, direction) => {
+  const item = document.getElementById(`${id}`)
+  if (direction === 'toMain') {
+    main.appendChild(item);
+    item.querySelector('.fa-solid').classList.remove('fa-heart-crack');
+    item.querySelector('.fa-solid').classList.add('fa-heart-circle-plus');    
+  } else if (direction === 'toFavs') {
+    favs.appendChild(item);
+    item.querySelector('.fa-solid').classList.remove('fa-heart-circle-plus');
+    item.querySelector('.fa-solid').classList.add('fa-heart-crack');    
+  }
+};
 
 
 
@@ -64,6 +75,20 @@
  * * Make the updateCollections function call, assign the item Id and the direction defined above
  */
 
-// Your code goes here...
+allItems.forEach((item) => {
+  item.addEventListener('click', () => {
+    const collection = item.parentElement.id;
+    const id = item.id;
+    let direction;
+
+    if (collection === 'main') {
+      direction = 'toFavs';
+    } else if (collection === 'favs') {
+      direction = 'toMain';
+    }
+
+    updateCollections(id, direction);
+  });
+});
 
 
